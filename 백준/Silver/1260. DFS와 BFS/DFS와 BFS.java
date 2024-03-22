@@ -1,86 +1,82 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
 
-  static int vertex, edge, start;
-
-  static Queue<Integer>[] graph_dfs;
-  static Queue<Integer>[] graph_bfs;
-  static boolean[] visited_dfs;
-  static boolean[] visited_bfs;
-  static int count_dfs = 0;
-  static int count_bfs = 0;
+  static ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+  static boolean[] visited;
 
   public static void main(String[] args) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     StringTokenizer tokenizer = new StringTokenizer(br.readLine());
+    int N = Integer.parseInt(tokenizer.nextToken());
+    int M = Integer.parseInt(tokenizer.nextToken());
+    int V = Integer.parseInt(tokenizer.nextToken());
 
-    vertex = Integer.parseInt(tokenizer.nextToken());
-    edge = Integer.parseInt(tokenizer.nextToken());
-    start = Integer.parseInt(tokenizer.nextToken());
-
-    graph_dfs = new PriorityQueue[vertex + 1];
-    graph_bfs = new PriorityQueue[vertex + 1];
-    visited_dfs = new boolean[vertex + 1];
-    visited_bfs = new boolean[vertex + 1];
-    for (int i = 0; i < vertex + 1; i++) {
-      graph_dfs[i] = new PriorityQueue<>();
-      graph_bfs[i] = new PriorityQueue<>();
+    visited = new boolean[N + 1];
+    for (int i = 0; i < N + 1; i++) {
+      graph.add(new ArrayList<>());
     }
 
-    for (int i = 0; i < edge; i++) {
+    for (int i = 0; i < M; i++) {
       tokenizer = new StringTokenizer(br.readLine());
       int s = Integer.parseInt(tokenizer.nextToken());
       int e = Integer.parseInt(tokenizer.nextToken());
-      graph_dfs[s].add(e);
-      graph_dfs[e].add(s);
-
-      graph_bfs[s].add(e);
-      graph_bfs[e].add(s);
+      graph.get(s).add(e);
+      graph.get(e).add(s);
+    }
+      
+    for (int i = 0; i < graph.size(); i++) {
+      Collections.sort(graph.get(i));
     }
 
-    dfs(start);
+    dfs(V);
+
+    visited = new boolean[N + 1];
     System.out.println();
-    bfs();
+
+    bfs(V);
   }
 
-  static void dfs(int v) {
-    if (visited_dfs[v]) {
+  static void dfs(Integer v) {
+    if (visited[v]) {
       return;
     }
 
-    visited_dfs[v] = true;
+    visited[v] = true;
     System.out.print(v + " ");
 
-    while (!graph_dfs[v].isEmpty()) {
-      dfs(graph_dfs[v].poll());
+    ArrayList<Integer> nodes = graph.get(v);
+    for (Integer node : nodes) {
+      dfs(node);
     }
   }
 
-  static void bfs() {
+  static void bfs(Integer v) {
     Queue<Integer> queue = new LinkedList<>();
-    queue.add(start);
+    queue.add(v);
 
     while (!queue.isEmpty()) {
       Integer poll = queue.poll();
 
-      if (visited_bfs[poll]) {
+      if (visited[poll]) {
         continue;
       }
-      visited_bfs[poll] = true;
+
+      visited[poll] = true;
       System.out.print(poll + " ");
 
-      while (!graph_bfs[poll].isEmpty()) {
-        queue.add(graph_bfs[poll].poll());
+      for (Integer node : graph.get(poll)) {
+        if (!visited[node]) {
+          queue.add(node);
+        }
       }
     }
-
-    System.out.println();
   }
 }
