@@ -32,35 +32,62 @@ public class Main {
         }
       } else {
         // 왼쪽 탐색
-        for (int j = 0; j < partIndexes[HEAD][1]; j++) {
-          // 팔먼저
-          if (partIndexes[LEFT_ARM][0] == null && arr[i][j] == '*') {
-            partIndexes[LEFT_ARM][0] = i;
-            partIndexes[LEFT_ARM][1] = j;
-          } else if (partIndexes[LEFT_LEG][0] == null && arr[i][j] == '*'
-              && i > partIndexes[LEFT_ARM][0]) {
-            partIndexes[LEFT_LEG][0] = i;
-            partIndexes[LEFT_LEG][1] = j;
-          } else if (partIndexes[LEFT_LEG][0] != null
-              && i > partIndexes[LEFT_LEG][0] && arr[i][j] == '*') {
-            partIndexes[LEFT_LEG_END][0] = i;
-            partIndexes[LEFT_LEG_END][1] = j;
+        int headCol = partIndexes[HEAD][1];
+
+        // 왼팔
+        if (partIndexes[LEFT_ARM][0] == null) {
+          for (int j = 0; j < headCol; j++) {
+            if (arr[i][j] == '*') {
+              partIndexes[LEFT_ARM][0] = i;
+              partIndexes[LEFT_ARM][1] = j;
+              break;
+            }
           }
         }
-        // 오른쪽 탐색
-        for (int j = N - 1; j > partIndexes[HEAD][1]; j--) {
-          if (partIndexes[RIGHT_ARM][0] == null && arr[i][j] == '*') {
-            partIndexes[RIGHT_ARM][0] = i;
-            partIndexes[RIGHT_ARM][1] = j;
-          } else if (partIndexes[RIGHT_LEG][0] == null && arr[i][j] == '*'
-              && i > partIndexes[RIGHT_ARM][0]) {
-            partIndexes[RIGHT_LEG][0] = i;
-            partIndexes[RIGHT_LEG][1] = j;
-          } else if (partIndexes[RIGHT_LEG][0] != null &&
-              i > partIndexes[RIGHT_LEG][0] && arr[i][j] == '*') {
-            partIndexes[RIGHT_LEG_END][0] = i;
-            partIndexes[RIGHT_LEG_END][1] = j;
+
+        // 왼다리
+        if (partIndexes[LEFT_ARM][0] != null
+            && i > partIndexes[LEFT_ARM][0]
+            && partIndexes[LEFT_LEG][0] == null
+            && arr[i][headCol - 1] == '*') {
+          partIndexes[LEFT_LEG][0] = i;
+          partIndexes[LEFT_LEG][1] = headCol - 1;
+        }
+
+        // 왼다리 끝
+        if (partIndexes[LEFT_LEG][0] != null &&
+        i > partIndexes[LEFT_LEG][0]
+            && arr[i][headCol - 1] == '*') {
+          partIndexes[LEFT_LEG_END][0] = i;
+          partIndexes[LEFT_LEG_END][1] = headCol - 1;
+        }
+
+        // 오른팔
+        if (partIndexes[RIGHT_ARM][0] == null) {
+          for (int j = N - 1; j >= headCol - 1; j--) {
+            if (arr[i][j] == '*') {
+              partIndexes[RIGHT_ARM][0] = i;
+              partIndexes[RIGHT_ARM][1] = j;
+              break;
+            }
           }
+        }
+
+        // 오른다리
+        if (partIndexes[RIGHT_ARM][0] != null
+            && i > partIndexes[RIGHT_ARM][0]
+            && partIndexes[RIGHT_LEG][0] == null
+            && arr[i][headCol + 1] == '*') {
+          partIndexes[RIGHT_LEG][0] = i;
+          partIndexes[RIGHT_LEG][1] = headCol + 1;
+        }
+
+        // 오른다리 끝
+        if (partIndexes[RIGHT_LEG][0] != null &&
+            i > partIndexes[RIGHT_LEG][0]
+            && arr[i][headCol + 1] == '*') {
+          partIndexes[RIGHT_LEG_END][0] = i;
+          partIndexes[RIGHT_LEG_END][1] = headCol + 1;
         }
       }
     }
