@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,43 +29,43 @@ public class Main {
 
       int seq = 1;
       Map<Integer, Team> scoreMap = new HashMap<>();
+      List<Team> teams = new ArrayList<>();
       for (int race : races) {
         if (participants.get(race) == 6) {
           if (!scoreMap.containsKey(race)) {
-            scoreMap.put(race, new Team(race));
+            Team team = new Team(race);
+            scoreMap.put(race, team);
+            teams.add(team);
           }
           Team team = scoreMap.get(race);
-          if (team.scores.size() < 4) {
-            team.scores.add(seq);
-          } else if (team.scores.size() == 4 && team.five == 0) {
+          if (team.count < 4) {
+            team.score += seq;
+          } else if (team.count == 4) {
             team.five = seq;
           }
+          team.count++;
           seq++;
         }
       }
 
-      Team win = scoreMap.values().stream()
-          .sorted(
-              Comparator.comparingInt(Team::total).thenComparingInt(team -> team.five))
-          .findFirst().get();
+      teams.sort((t1, t2) -> {
+        int comp = Integer.compare(t1.score, t2.score);
+        return (comp == 0) ? Integer.compare(t1.five, t2.five) : comp;
+      });
 
-      System.out.println(win.num);
+      System.out.println(teams.get(0).num);
     }
   }
 
   static class Team {
 
     int num;
-    List<Integer> scores;
+    int score;
+    int count;
     int five;
 
     Team(int num) {
       this.num = num;
-      this.scores = new ArrayList<>();
-    }
-
-    int total() {
-      return scores.stream().reduce(0, Integer::sum);
     }
   }
 }
