@@ -11,11 +11,11 @@ public class Main {
 
   static int[] prices;
 
-  static int remain;
+  static long remain;
 
   static int currentCity;
 
-  static int totalPrice;
+  static long totalPrice;
 
   public static void main(String[] args) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -49,12 +49,12 @@ public class Main {
       }
 
       // 찾았으면 그 도시까지 가야하는 거리의 양을 현재 주유소에서 충전
-      int distanceToNextCity = 0;
+      long distanceToNextCity = 0;
       for (int i = currentCity; i < nextCity; i++) {
         distanceToNextCity += distances[i];
       }
 
-      totalPrice += (distanceToNextCity * prices[currentCity]);
+      totalPrice += ((long) distanceToNextCity * prices[currentCity]);
       remain -= distanceToNextCity;
       currentCity = nextCity;
     }
