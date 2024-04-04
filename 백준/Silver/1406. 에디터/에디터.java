@@ -1,0 +1,51 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.StringTokenizer;
+
+public class Main {
+
+  public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    List<Character> list = new LinkedList<>();
+    for (char ch : br.readLine().toCharArray()) {
+      list.add(ch);
+    }
+
+    ListIterator<Character> iterator = list.listIterator(list.size());
+
+    int M = Integer.parseInt(br.readLine());
+    for (int i = 0; i < M; i++) {
+      StringTokenizer tokenizer = new StringTokenizer(br.readLine());
+      String cmd = tokenizer.nextToken();
+      switch (cmd) {
+        case "P":
+          iterator.add(tokenizer.nextToken().charAt(0));
+          break;
+        case "L":
+          if (iterator.hasPrevious()) {
+            iterator.previous();
+          }
+          break;
+        case "D":
+          if (iterator.hasNext()) {
+            iterator.next();
+          }
+          break;
+        case "B":
+          if (iterator.hasPrevious()) {
+            iterator.previous();
+            iterator.remove();
+          }
+          break;
+      }
+    }
+
+    StringBuilder sb = new StringBuilder();
+    list.forEach(sb::append);
+    System.out.println(sb);
+  }
+}
