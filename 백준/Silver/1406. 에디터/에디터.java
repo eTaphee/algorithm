@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -44,8 +46,11 @@ public class Main {
       }
     }
 
-    StringBuilder sb = new StringBuilder();
-    list.forEach(sb::append);
-    System.out.println(sb);
+    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    for (Character character : list) {
+      bw.write(character);
+    }
+    bw.flush();
+    bw.close();
   }
 }
