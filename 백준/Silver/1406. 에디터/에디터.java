@@ -21,23 +21,23 @@ public class Main {
 
     int M = Integer.parseInt(br.readLine());
     for (int i = 0; i < M; i++) {
-      StringTokenizer tokenizer = new StringTokenizer(br.readLine());
-      String cmd = tokenizer.nextToken();
-      switch (cmd) {
-        case "P":
-          iterator.add(tokenizer.nextToken().charAt(0));
+      String command = br.readLine();
+      char c = command.charAt(0);
+      switch (c) {
+        case 'P':
+          iterator.add(command.charAt(2));
           break;
-        case "L":
+        case 'L':
           if (iterator.hasPrevious()) {
             iterator.previous();
           }
           break;
-        case "D":
+        case 'D':
           if (iterator.hasNext()) {
             iterator.next();
           }
           break;
-        case "B":
+        case 'B':
           if (iterator.hasPrevious()) {
             iterator.previous();
             iterator.remove();
