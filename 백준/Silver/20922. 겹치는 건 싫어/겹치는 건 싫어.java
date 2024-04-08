@@ -1,13 +1,12 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class Main {
 
   static int N, K;
-  static HashMap<Integer, Integer> map = new HashMap<>();
+  static int[] countArr = new int[100_000 + 1];
   static int[] arr;
   static int max = 0;
 
@@ -26,14 +25,11 @@ public class Main {
     for (int i = 0; i < N; i++) {
       int num = Integer.parseInt(tokenizer.nextToken());
       arr[i] = num;
+      countArr[num]++;
       count++;
-      map.put(num, map.getOrDefault(num, 0) + 1);
-      Integer curCount = map.get(num);
-      while (curCount != null && curCount > K) {
-        int startNum = arr[start];
-        map.put(startNum, map.get(startNum) - 1);
-        curCount = map.get(num);
-        start++;
+      while (countArr[num] > K) {
+        int startNum = arr[start++];
+        countArr[startNum]--;
         count--;
       }
       max = Math.max(max, count);
